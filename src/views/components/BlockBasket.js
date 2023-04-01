@@ -13,7 +13,8 @@ setToBusket = async (value) => {
     console.log(error);
   }
 };
-const Block = ({ imgSrc, pizzaName, description, cost }) => {
+
+const BlockBasket = ({ imgSrc, pizzaName, description, cost }) => {
   return (
     <View style={styles.menuContainer}>
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>
@@ -33,6 +34,7 @@ const Block = ({ imgSrc, pizzaName, description, cost }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   menuContainer: {
     alignItems: "center",
@@ -71,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Block;
+export default BlockBasket;

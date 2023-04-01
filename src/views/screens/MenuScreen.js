@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -30,32 +30,41 @@ db.transaction((tx) => {
 
 const MenuScreen = ({ navigation }) => {
   const PizzaFilling = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * from pizzaList",
-        [],
-        (_, { rows }) => {
-          if (rows.length > 0) {
-            for (let i = 0; i < rows._array.length; i += 1) {
-              // Не знаю как добавить
-              // <Block
-              //   imgSrc={rows._array[i].pizzaImage}
-              //   pizzaName={rows._array[i].pizzaName}
-              //   description={rows._array[i].pizzaDescription}
-              //   cost={rows._array[i].pizzaCost}
-              // />;
+    const [pizzaList, setPizzaList] = useState([]);
+    useEffect(() => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * from pizzaList",
+          [],
+          (_, { rows }) => {
+            if (rows.length > 0) {
+              setPizzaList(rows._array);
+            } else {
+              console.log("Таблица пицц пуста, заполняем");
+              TableFilling();
             }
-          } else {
-            console.log("Таблица пицц пуста, заполняем");
-            TableFilling();
+          },
+          (_, error) => {
+            console.log("Error PizzaList:", error);
+            Alert.alert("Ошибка");
           }
-        },
-        (_, error) => {
-          console.log("Error authenticating user:", error);
-          Alert.alert("Ошибка");
-        }
-      );
-    });
+        );
+      });
+    }, []);
+
+    return (
+      <View>
+        {pizzaList.map((pizza) => (
+          <Block
+            key={pizza.idPizza}
+            imgSrc={pizza.pizzaImage}
+            pizzaName={pizza.pizzaName}
+            description={pizza.pizzaDescription}
+            cost={pizza.pizzaCost}
+          />
+        ))}
+      </View>
+    );
   };
 
   return (
@@ -72,14 +81,6 @@ const MenuScreen = ({ navigation }) => {
           <View style={styles.mainScreen}>
             <Text>Меню</Text>
             <PizzaFilling />
-            {/* {pizzaList.map((obj) => (
-              <Block
-                imgSrc={obj.imgSrc}
-                pizzaName={obj.pizzaName}
-                description={obj.description}
-                cost={obj.cost}
-              />
-            ))} */}
             <StatusBar style="auto" />
           </View>
         </View>

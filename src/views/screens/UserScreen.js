@@ -28,47 +28,42 @@ function openDatabase() {
 
 const db = openDatabase();
 
-function Items() {
-  const [UserInfo, SetUserInfo] = React.useState(null);
-  getMyStringValue = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("@storage_User");
-      console.log(jsonValue);
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // read error
-    }
-
-    console.log("Done.");
-  };
-
-  useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM users where id = ?",
-        [getMyStringValue()],
-        (_, { rows: { _array } }) => {
-          SetUserInfo(_array);
-          console.log(_array);
-        }
-      );
-    });
-  }, []);
-
-  return (
-    <View>
-      {UserInfo.map(({ obj }) => (
-        <Text>{obj}</Text>
-      ))}
-    </View>
-  );
-}
+getMyStringValue = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem("@storage_User");
+    console.log(jsonValue);
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    // read error
+  }
+  console.log("Done.");
+};
 
 const UserScreen = () => {
+  const getUserName = () => {
+    const [userName, setUserName] = useState("");
+    useEffect(() => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM users where id = ?",
+          [getMyStringValue()],
+          (_, { rows }) => {
+            setUserName(_array[0].name);
+          }
+        );
+      });
+    }, []);
+    return (
+      <View>
+        <Text>{userName}</Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.nameContainer}>
-        <Items />
+        <getUserName />
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>

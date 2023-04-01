@@ -10,6 +10,8 @@ import RegistrationScreen from "./src/views/screens/RegistrationScreen";
 import MenuScreen from "./src/views/screens/MenuScreen";
 import React from "react";
 import AfterRegisterNavigation from "./AfterRegistrationNavigation";
+import COLORS from "./src/conts/colors";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -33,7 +35,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.sixty,
     alignItems: "center",
     justifyContent: "center",
   },
