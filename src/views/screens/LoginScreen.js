@@ -24,10 +24,10 @@ db.transaction((tx) => {
     "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, name TEXT, phone INTEGER,  password TEXT);",
     [],
     (_, result) => {
-      console.log("Таблица успешно создана");
+      console.log("Таблица логина успешно создана");
     },
     (_, error) => {
-      console.log("Ошибка создания таблицы:", error);
+      console.log("Ошибка создания таблицы логина:", error);
     }
   );
 });
@@ -64,7 +64,9 @@ const LoginScreen = ({ navigation }) => {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem("@storage_User", value);
+      const jsonValue = JSON.stringify(value);
+      console.log(jsonValue);
+      await AsyncStorage.setItem("@storage_User", jsonValue);
     } catch (e) {
       // saving error
     }

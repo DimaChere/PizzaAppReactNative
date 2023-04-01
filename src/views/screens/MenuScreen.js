@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,49 @@ import {
 } from "react-native";
 import COLORS from "../../conts/colors";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import * as SQLite from "expo-sqlite";
+import TableFilling from "../components/pizzaList";
+import Block from "../components/Block";
+
+const db = SQLite.openDatabase("db.db");
+
+db.transaction((tx) => {
+  tx.executeSql(
+    "CREATE TABLE IF NOT EXISTS pizzaList (idPizza INTEGER PRIMARY KEY AUTOINCREMENT, pizzaImage TEXT, pizzaName TEXT, pizzaDescription TEXT,  pizzaCost INTEGER);",
+    [],
+    (_, result) => {
+      console.log("Таблица меню успешно создана");
+    },
+    (_, error) => {
+      console.log("Ошибка создания таблицы меню:", error);
+    }
+  );
+});
 
 const MenuScreen = ({ navigation }) => {
+  [pizza, setPizza] = useState(PizzaFilling());
+
+  const PizzaFilling = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * from pizzaList",
+        [],
+        (_, { rows }) => {
+          if (rows.length > 0) {
+            return rows._array;
+          } else {
+            console.log("Таблица пицц пуста, заполняем");
+            TableFilling();
+          }
+        },
+        (_, error) => {
+          console.log("Error authenticating user:", error);
+          Alert.alert("Ошибка");
+        }
+      );
+    });
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.searchContainer}>
@@ -24,12 +65,14 @@ const MenuScreen = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.mainScreen}>
             <Text>Меню</Text>
-            {/* {pizzaList.map((obj) => (
+            <PizzaFilling />
+            {console.log(pizza)}
+            {/* {pizza.map((obj) => (
               <Block
-                imgSrc={obj.imgSrc}
+                imgSrc={obj.pizzaImage}
                 pizzaName={obj.pizzaName}
-                description={obj.description}
-                cost={obj.cost}
+                description={obj.pizzaDescription}
+                cost={obj.pizzaCost}
               />
             ))} */}
             <StatusBar style="auto" />

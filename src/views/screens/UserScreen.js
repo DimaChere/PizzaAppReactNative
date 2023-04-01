@@ -11,18 +11,30 @@ import COLORS from "../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("db.db");
+function openDatabase() {
+  if (Platform.OS === "web") {
+    return {
+      transaction: () => {
+        return {
+          executeSql: () => {},
+        };
+      },
+    };
+  }
 
-const UserScreen = () => {
-  const [UserInfo, SetUserInfo] = React.useState({
-    email: "",
-    name: "",
-    phone: "",
-    password: "",
-  });
+  const db = SQLite.openDatabase("db.db");
+  return db;
+}
+
+const db = openDatabase();
+
+function Items() {
+  const [UserInfo, SetUserInfo] = React.useState(null);
   getMyStringValue = async () => {
     try {
-      return await AsyncStorage.getItem("@storage_User");
+      const jsonValue = await AsyncStorage.getItem("@storage_User");
+      console.log(jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       // read error
     }
@@ -32,16 +44,31 @@ const UserScreen = () => {
 
   useEffect(() => {
     db.transaction((tx) => {
-      tx.executeSql("SELECT * FROM users", [], (_, { rows }) => {
-        console.log(rows);
-      });
+      tx.executeSql(
+        "SELECT * FROM users where id = ?",
+        [getMyStringValue()],
+        (_, { rows: { _array } }) => {
+          SetUserInfo(_array);
+          console.log(_array);
+        }
+      );
     });
   }, []);
 
   return (
+    <View>
+      {UserInfo.map(({ obj }) => (
+        <Text>{obj}</Text>
+      ))}
+    </View>
+  );
+}
+
+const UserScreen = () => {
+  return (
     <SafeAreaView>
       <View style={styles.nameContainer}>
-        <Text>{UserInfo}</Text>
+        <Items />
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>

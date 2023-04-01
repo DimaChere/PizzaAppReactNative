@@ -24,10 +24,10 @@ db.transaction((tx) => {
     "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, name TEXT, phone INTEGER,  password TEXT);",
     [],
     (_, result) => {
-      console.log("Таблица успешно создана");
+      console.log("Таблица регистрации успешно создана");
     },
     (_, error) => {
-      console.log("Ошибка создания таблицы:", error);
+      console.log("Ошибка создания таблицы регистрации:", error);
     }
   );
 });
@@ -39,9 +39,9 @@ const RegistrationScreen = ({ navigation }) => {
     phone: "",
     password: "",
   });
+
   const [errors, setErrors] = React.useState({});
 
-  const [loading, setLoading] = React.useState(false);
   const validate = () => {
     Keyboard.dismiss();
     let valid = true;
@@ -77,25 +77,20 @@ const RegistrationScreen = ({ navigation }) => {
   };
 
   const register = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-
-      db.transaction((tx) => {
-        tx.executeSql(
-          `INSERT INTO users ( email, name, phone, password) VALUES (?, ?, ?, ?);`,
-          [inputs.email, inputs.name, inputs.phone, inputs.password],
-          (_, result) => {
-            console.log("New user added successfully");
-            navigation.navigate("LoginScreen");
-          },
-          (_, error) => {
-            console.log("Error adding user:", error);
-            Alert.alert("Ошибка", "Что-то пошло не так(");
-          }
-        );
-      });
-    }, 1000);
+    db.transaction((tx) => {
+      tx.executeSql(
+        "INSERT INTO users ( email, name, phone, password) VALUES (?, ?, ?, ?);",
+        [inputs.email, inputs.name, inputs.phone, inputs.password],
+        (_, result) => {
+          console.log("New user added successfully");
+          navigation.navigate("LoginScreen");
+        },
+        (_, error) => {
+          console.log("Error adding user:", error);
+          Alert.alert("Ошибка", "Что-то пошло не так(");
+        }
+      );
+    });
   };
   const handleOnChange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
