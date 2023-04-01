@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -29,8 +29,6 @@ db.transaction((tx) => {
 });
 
 const MenuScreen = ({ navigation }) => {
-  [pizza, setPizza] = useState(PizzaFilling());
-
   const PizzaFilling = () => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -38,7 +36,15 @@ const MenuScreen = ({ navigation }) => {
         [],
         (_, { rows }) => {
           if (rows.length > 0) {
-            return rows._array;
+            for (let i = 0; i < rows._array.length; i += 1) {
+              // Не знаю как добавить
+              // <Block
+              //   imgSrc={rows._array[i].pizzaImage}
+              //   pizzaName={rows._array[i].pizzaName}
+              //   description={rows._array[i].pizzaDescription}
+              //   cost={rows._array[i].pizzaCost}
+              // />;
+            }
           } else {
             console.log("Таблица пицц пуста, заполняем");
             TableFilling();
@@ -66,13 +72,12 @@ const MenuScreen = ({ navigation }) => {
           <View style={styles.mainScreen}>
             <Text>Меню</Text>
             <PizzaFilling />
-            {console.log(pizza)}
-            {/* {pizza.map((obj) => (
+            {/* {pizzaList.map((obj) => (
               <Block
-                imgSrc={obj.pizzaImage}
+                imgSrc={obj.imgSrc}
                 pizzaName={obj.pizzaName}
-                description={obj.pizzaDescription}
-                cost={obj.pizzaCost}
+                description={obj.description}
+                cost={obj.cost}
               />
             ))} */}
             <StatusBar style="auto" />
