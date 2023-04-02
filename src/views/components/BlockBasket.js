@@ -14,21 +14,16 @@ setToBusket = async (value) => {
   }
 };
 
-const BlockBasket = ({ imgSrc, pizzaName, description, cost }) => {
+const BlockBasket = ({ imgSrc, pizzaName, cost }) => {
   return (
     <View style={styles.menuContainer}>
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>
       <View style={styles.shortDescription}>
-        <View style={styles.Name}>
+        <View style={styles.name}>
           <Text style={{ fontSize: 20 }}>{pizzaName}</Text>
         </View>
-        <View style={styles.Description}>
-          <Text>{description}</Text>
-        </View>
-        <View style={styles.buyButton}>
-          <Text style={{ fontSize: 18 }} onPress={() => setToBusket(pizzaName)}>
-            {cost} ₽
-          </Text>
+        <View style={styles.cost}>
+          <Text style={{ fontSize: 18 }}>{cost} ₽</Text>
         </View>
       </View>
     </View>
@@ -39,37 +34,32 @@ const styles = StyleSheet.create({
   menuContainer: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
     paddingLeft: "3%",
     paddingVertical: "3%",
-    paddingRight: "30%",
-    width: "90%",
-    height: 200,
+    paddingRight: "3%",
+    width: "100%",
+    height: 100,
     borderRadius: 20,
   },
   shortDescription: {
+    width: "100%",
     height: "100%",
-    flexDirection: "column",
-    alignContent: "space-around",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
   },
   pizza: {
-    marginLeft: 100,
-    borderRadius: 150,
+    borderRadius: 25,
     borderWidth: 5,
-    height: 175,
-    width: 175,
+    height: 50,
+    width: 50,
     resizeMode: "contain",
   },
-  Name: { flex: 1 },
-  Description: { flex: 5 },
-  buyButton: {
-    flex: 2,
+  name: { justifyContent: "center", marginLeft: 10 },
+  cost: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 30,
-    backgroundColor: COLORS.thirty,
-    height: 60,
-    width: 80,
+    marginRight: 60,
   },
 });
 

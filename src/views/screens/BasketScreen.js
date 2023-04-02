@@ -10,10 +10,14 @@ import {
 import COLORS from "../../conts/colors";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as SQLite from "expo-sqlite";
-import TableFilling from "../components/pizzaList";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage, {
+  useAsyncStorage,
+} from "@react-native-async-storage/async-storage";
 import Button from "../components/Button";
 import BlockBasket from "../components/BlockBasket";
+import BasketFill from "../components/BasketFill";
+
+const db = SQLite.openDatabase("db.db");
 
 const BasketScreen = () => {
   const ClearAll = async () => {
@@ -21,6 +25,7 @@ const BasketScreen = () => {
       await AsyncStorage.removeItem("@order");
     } catch (e) {}
   };
+
   return (
     <SafeAreaView>
       <View style={styles.upperContainer}>
@@ -28,9 +33,9 @@ const BasketScreen = () => {
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
-          {/* <BlockBasket */}
           <View style={styles.mainScreen}>
             <StatusBar style="auto" />
+            <BasketFill />
             <Button title="Очистить корзину" onPress={ClearAll} />
           </View>
         </View>
