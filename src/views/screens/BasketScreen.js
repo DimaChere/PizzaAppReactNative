@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
+  RefreshControl,
 } from "react-native";
 import COLORS from "../../conts/colors";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -15,12 +16,91 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../components/Button";
 import BlockBasket from "../components/BlockBasket";
 
+const db = SQLite.openDatabase("db.db");
+// на всякий случай
+db.transaction((tx) => {
+  tx.executeSql(
+    "CREATE TABLE IF NOT EXISTS pizzaList (idPizza INTEGER PRIMARY KEY AUTOINCREMENT, pizzaImage TEXT, pizzaName TEXT, pizzaDescription TEXT,  pizzaCost INTEGER);",
+    [],
+    (_, result) => {
+      console.log("Таблица меню успешно создана");
+    },
+    (_, error) => {
+      console.log("Ошибка создания таблицы меню:", error);
+    }
+  );
+});
+// основня функция
 const BasketScreen = () => {
+  // очистка корзины
   const ClearAll = async () => {
     try {
+      console.log("корзина очищена");
       await AsyncStorage.removeItem("@order");
     } catch (e) {}
   };
+  // массив названий пицц
+  let [orderList, setOrderList] = useState([]);
+
+  const getOrder = async () => {
+    try {
+      const order = await AsyncStorage.getItem("@order");
+      const parsedOrder = order ? JSON.parse(order) : [];
+      setOrderList(parsedOrder);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getOrder();
+  }, []);
+
+  const FillBusket = () => {
+    return (
+      <View>
+        {orderList.map((obj) => {
+          return pizzaBloks({ obj });
+        })}
+      </View>
+    );
+  };
+
+  const pizzaBloks = (obj) => {
+    const [fullOrder, setFullOrder] = useState([]);
+    useEffect(() => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM pizzaList where pizzaName = ?",
+          [obj],
+          (_, { rows }) => {
+            if (rows.length > 0) {
+              console.log(rows._array);
+              setFullOrder(rows._array);
+            } else {
+              console.log("Таблица пицц пуста");
+            }
+          },
+          (_, error) => {
+            console.log("Error PizzaList:", error);
+          }
+        );
+      });
+    }, []);
+
+    return (
+      <View>
+        {fullOrder.map((pizza) => {
+          <BlockBasket
+            key={pizza.idPizza}
+            imgSrc={pizza.pizzaImage}
+            pizzaName={pizza.pizzaName}
+            description={pizza.pizzaDescription}
+            cost={pizza.pizzaCost}
+          />;
+        })}
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.upperContainer}>
@@ -28,8 +108,8 @@ const BasketScreen = () => {
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
-          {/* <BlockBasket */}
           <View style={styles.mainScreen}>
+            <FillBusket />
             <StatusBar style="auto" />
             <Button title="Очистить корзину" onPress={ClearAll} />
           </View>

@@ -28,31 +28,41 @@ function openDatabase() {
 
 const db = openDatabase();
 
-getMyStringValue = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem("@storage_User");
-    console.log(jsonValue);
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-  } catch (e) {
-    // read error
-  }
-  console.log("Done.");
-};
-
 const UserScreen = () => {
+  const [userID, setUserID] = useState(0);
+
+  getMyStringValue = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@storage_User");
+      console.log(jsonValue);
+      setUserID(jsonValue);
+    } catch (e) {
+      // read error
+    }
+    console.log("ID успешно дошло.");
+  };
+
+  useEffect(() => {
+    getMyStringValue();
+  }, []);
+  const [userName, setUserName] = useState("");
+
   const getUserName = () => {
-    const [userName, setUserName] = useState("");
-    useEffect(() => {
-      db.transaction((tx) => {
-        tx.executeSql(
-          "SELECT * FROM users where id = ?",
-          [getMyStringValue()],
-          (_, { rows }) => {
-            setUserName(_array[0].name);
-          }
-        );
-      });
-    }, []);
+    getMyStringValue();
+    db.transaction((tx) => {
+      tx.executeSql(
+        "SELECT name FROM users WHERE id = ?",
+        [userID],
+        (_, { rows }) => {
+          console.log(rows._array[0]);
+          setUserName(rows._array[0].name);
+        },
+        (_, error) => {
+          console.log("Ошибка создания таблицы логина:", error);
+        }
+      );
+    });
+
     return (
       <View>
         <Text>{userName}</Text>
@@ -69,6 +79,7 @@ const UserScreen = () => {
         <View style={styles.container}>
           <View style={styles.mainScreen}>
             <Text>Меню</Text>
+
             <StatusBar style="auto" />
           </View>
         </View>
