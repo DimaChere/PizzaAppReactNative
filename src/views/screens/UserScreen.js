@@ -10,6 +10,8 @@ import {
 import COLORS from "../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SQLite from "expo-sqlite";
+import GetUserNameFromId from "../components/GetUserNameFromId";
+import Button from "../components/Button";
 
 function openDatabase() {
   if (Platform.OS === "web") {
@@ -45,41 +47,16 @@ const UserScreen = () => {
   useEffect(() => {
     getMyStringValue();
   }, []);
-  const [userName, setUserName] = useState("");
-
-  const getUserName = () => {
-    getMyStringValue();
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT name FROM users WHERE id = ?",
-        [userID],
-        (_, { rows }) => {
-          console.log(rows._array[0]);
-          setUserName(rows._array[0].name);
-        },
-        (_, error) => {
-          console.log("Ошибка создания таблицы логина:", error);
-        }
-      );
-    });
-
-    return (
-      <View>
-        <Text>{userName}</Text>
-      </View>
-    );
-  };
 
   return (
     <SafeAreaView>
       <View style={styles.nameContainer}>
-        <getUserName />
+        <GetUserNameFromId userID={userID} />
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.mainScreen}>
             <Text>Меню</Text>
-
             <StatusBar style="auto" />
           </View>
         </View>

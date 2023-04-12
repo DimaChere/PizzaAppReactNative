@@ -64,9 +64,9 @@ const LoginScreen = ({ navigation }) => {
 
   const storeData = async (value) => {
     try {
-      // const jsonValue = JSON.stringify(value);
-      // console.log(jsonValue);
-      // await AsyncStorage.setItem("@storage_User", jsonValue);
+      const jsonValue = JSON.stringify(value);
+      console.log(jsonValue);
+      await AsyncStorage.setItem("@storage_User", jsonValue);
       await AsyncStorage.setItem("@storage_User", value);
     } catch (e) {
       // saving error

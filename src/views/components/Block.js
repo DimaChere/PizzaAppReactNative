@@ -2,17 +2,24 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import React from "react";
 import COLORS from "../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// Функция добавления в асинк сторедж нового заказа
 setToBusket = async (value) => {
   try {
     const order = await AsyncStorage.getItem("@order");
     const parsedOrder = order ? JSON.parse(order) : [];
-    const newOrder = [...parsedOrder, value];
+    const existingOrder = parsedOrder.find((item) => item.name === value) || {
+      count: 0,
+    };
+    const newOrder = parsedOrder
+      .filter((item) => item.name !== value)
+      .concat({ name: value, count: existingOrder.count + 1 });
     console.log(newOrder);
     await AsyncStorage.setItem("@order", JSON.stringify(newOrder));
   } catch (error) {
     console.log(error);
   }
 };
+
 const Block = ({ imgSrc, pizzaName, description, cost }) => {
   return (
     <View style={styles.menuContainer}>

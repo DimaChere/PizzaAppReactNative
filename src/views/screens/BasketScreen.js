@@ -55,17 +55,19 @@ const BasketScreen = () => {
   }, []);
 
   const FillBusket = () => {
+    console.log("------------------------------");
     return (
       <View>
         {orderList.map((obj) => {
-          return pizzaBloks({ obj });
+          pizzaBloks(obj.name, obj.count);
         })}
       </View>
     );
   };
 
-  const pizzaBloks = (obj) => {
+  const pizzaBloks = async (obj, count) => {
     const [fullOrder, setFullOrder] = useState([]);
+
     useEffect(() => {
       db.transaction((tx) => {
         tx.executeSql(
@@ -73,8 +75,10 @@ const BasketScreen = () => {
           [obj],
           (_, { rows }) => {
             if (rows.length > 0) {
-              console.log(rows._array);
-              setFullOrder(rows._array);
+              console.log(`Добавление пиццы ${obj}`);
+              console.log(rows._array[0]);
+              setFullOrder(rows._array[0]);
+              console.log(`fullOrder: ${fullOrder}`);
             } else {
               console.log("Таблица пицц пуста");
             }
@@ -84,21 +88,7 @@ const BasketScreen = () => {
           }
         );
       });
-    }, []);
-
-    return (
-      <View>
-        {fullOrder.map((pizza) => {
-          <BlockBasket
-            key={pizza.idPizza}
-            imgSrc={pizza.pizzaImage}
-            pizzaName={pizza.pizzaName}
-            description={pizza.pizzaDescription}
-            cost={pizza.pizzaCost}
-          />;
-        })}
-      </View>
-    );
+    }, [obj]);
   };
 
   return (
