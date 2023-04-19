@@ -10,26 +10,10 @@ import {
 } from "react-native";
 import COLORS from "../../conts/colors";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import * as SQLite from "expo-sqlite";
-import TableFilling from "../components/pizzaList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../components/Button";
-import BlockBasket from "../components/BlockBasket";
+import GetPizzaFromOrder from "../components/GetPizzaFromOrder";
 
-const db = SQLite.openDatabase("db.db");
-// на всякий случай
-db.transaction((tx) => {
-  tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS pizzaList (idPizza INTEGER PRIMARY KEY AUTOINCREMENT, pizzaImage TEXT, pizzaName TEXT, pizzaDescription TEXT,  pizzaCost INTEGER);",
-    [],
-    (_, result) => {
-      console.log("Таблица меню успешно создана");
-    },
-    (_, error) => {
-      console.log("Ошибка создания таблицы меню:", error);
-    }
-  );
-});
 // основня функция
 const BasketScreen = () => {
   // очистка корзины
@@ -39,57 +23,28 @@ const BasketScreen = () => {
       await AsyncStorage.removeItem("@order");
     } catch (e) {}
   };
+
   // массив названий пицц
-  let [orderList, setOrderList] = useState([]);
+  let [orderList, setOrderList] = useState([{}]);
 
   const getOrder = async () => {
     try {
-      const order = await AsyncStorage.getItem("@order");
-      const parsedOrder = order ? JSON.parse(order) : [];
-      setOrderList(parsedOrder);
-    } catch (error) {}
+      const jsonValue = await AsyncStorage.getItem("@order"); // получаем JSON-строку из AsyncStorage
+      if (jsonValue !== null) {
+        const orderArray = JSON.parse(jsonValue); // преобразуем строку в массив
+        console.log("Заказ дошел:");
+        console.log(orderArray);
+        setOrderList(orderArray);
+      }
+    } catch (e) {
+      console.log(`Error ${e}`);
+    }
+    console.log("Пицца успешно дошла.");
   };
 
   useEffect(() => {
     getOrder();
   }, []);
-
-  const FillBusket = () => {
-    console.log("------------------------------");
-    return (
-      <View>
-        {orderList.map((obj) => {
-          pizzaBloks(obj.name, obj.count);
-        })}
-      </View>
-    );
-  };
-
-  const pizzaBloks = async (obj, count) => {
-    const [fullOrder, setFullOrder] = useState([]);
-
-    useEffect(() => {
-      db.transaction((tx) => {
-        tx.executeSql(
-          "SELECT * FROM pizzaList where pizzaName = ?",
-          [obj],
-          (_, { rows }) => {
-            if (rows.length > 0) {
-              console.log(`Добавление пиццы ${obj}`);
-              console.log(rows._array[0]);
-              setFullOrder(rows._array[0]);
-              console.log(`fullOrder: ${fullOrder}`);
-            } else {
-              console.log("Таблица пицц пуста");
-            }
-          },
-          (_, error) => {
-            console.log("Error PizzaList:", error);
-          }
-        );
-      });
-    }, [obj]);
-  };
 
   return (
     <SafeAreaView>
@@ -99,8 +54,19 @@ const BasketScreen = () => {
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.mainScreen}>
-            <FillBusket />
+            {orderList.map((pizza) => {
+              console.log(`id ${pizza.pizzaID}`);
+              console.log(`count ${pizza.count}`);
+              return (
+                <GetPizzaFromOrder
+                  key={pizza.pizzaID}
+                  pizzaID={pizza.pizzaID}
+                  count={pizza.count}
+                />
+              );
+            })}
             <StatusBar style="auto" />
+            <Button title="Заполнить useState" onPress={getOrder} />
             <Button title="Очистить корзину" onPress={ClearAll} />
           </View>
         </View>

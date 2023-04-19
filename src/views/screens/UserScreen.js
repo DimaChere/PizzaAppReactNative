@@ -46,7 +46,7 @@ const UserScreen = () => {
 
   useEffect(() => {
     getMyStringValue();
-  }, []);
+  }, [userID]);
 
   return (
     <SafeAreaView>

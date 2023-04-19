@@ -14,7 +14,14 @@ setToBusket = async (value) => {
   }
 };
 
-const BlockBasket = ({ imgSrc, pizzaName, description, cost }) => {
+const BlockBasket = ({
+  idPizza,
+  imgSrc,
+  pizzaName,
+  description,
+  cost,
+  count,
+}) => {
   return (
     <View style={styles.menuContainer}>
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>
@@ -26,9 +33,7 @@ const BlockBasket = ({ imgSrc, pizzaName, description, cost }) => {
           <Text>{description}</Text>
         </View>
         <View style={styles.buyButton}>
-          <Text style={{ fontSize: 18 }} onPress={() => setToBusket(pizzaName)}>
-            {cost} ₽
-          </Text>
+          <Text style={{ fontSize: 18 }}>{count * cost} ₽</Text>
         </View>
       </View>
     </View>

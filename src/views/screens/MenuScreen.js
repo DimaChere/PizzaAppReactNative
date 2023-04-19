@@ -57,6 +57,7 @@ const MenuScreen = ({ navigation }) => {
         {pizzaList.map((pizza) => (
           <Block
             key={pizza.idPizza}
+            idPizza={pizza.idPizza}
             imgSrc={pizza.pizzaImage}
             pizzaName={pizza.pizzaName}
             description={pizza.pizzaDescription}
