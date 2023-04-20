@@ -70,17 +70,12 @@ const MenuScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <View style={styles.searchContainer}>
-        <Icon
-          name="food-drumstick-outline"
-          style={styles.search}
-          onPress={() => navigation.navigate("SearchScreen")}
-        ></Icon>
+      <View style={styles.upperContainer}>
+        <Text style={styles.contents}>Меню</Text>
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
-          <View style={styles.mainScreen}>
-            <Text>Меню</Text>
+          <View style={styles.mainScreen}> 
             <PizzaFilling />
             <StatusBar style="auto" />
           </View>
@@ -106,16 +101,20 @@ const styles = StyleSheet.create({
     width: 50,
     backgroundColor: "black",
   },
-  searchContainer: {
+  upperContainer: {
     zIndex: 2,
     backgroundColor: COLORS.thirty,
     height: 80,
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
+    alignItems: "center",
     flexDirection: "row",
-    paddingTop: 30,
-    paddingRight: 10,
+    paddingLeft: 30,
   },
   search: {
+    fontSize: 40,
+    color: COLORS.ten,
+  },
+  contents: {
     fontSize: 40,
     color: COLORS.ten,
   },

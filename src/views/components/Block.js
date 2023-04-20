@@ -26,29 +26,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //   }
 // };
 
-setToBusket = async (value) => {
-  try {
-    const order = await AsyncStorage.getItem("@order");
-    const parsedOrder = order ? JSON.parse(order) : [];
-
-    const existingOrder = parsedOrder.find(
-      (item) => item.pizzaID === value
-    ) || {
-      count: 0,
-    };
-
-    const newOrder = parsedOrder
-      .filter((item) => item.pizzaID !== value)
-      .concat({ pizzaID: value, count: existingOrder.count + 1 });
-
-    console.log(`Заказ: ${JSON.stringify(newOrder)}`);
-
-    await AsyncStorage.setItem("@order", JSON.stringify(newOrder));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // setToBusket = async (value) => {
 //   try {
 //     const order = await AsyncStorage.getItem("@order");
@@ -73,6 +50,29 @@ setToBusket = async (value) => {
 // };
 
 const Block = ({ idPizza, imgSrc, pizzaName, description, cost }) => {
+  const setToBusket = async (value) => {
+    try {
+      const order = await AsyncStorage.getItem("@order");
+      const parsedOrder = order ? JSON.parse(order) : [];
+  
+      const existingOrder = parsedOrder.find(
+        (item) => item.pizzaID === value
+      ) || {
+        count: 0,
+      };
+  
+      const newOrder = parsedOrder
+        .filter((item) => item.pizzaID !== value)
+        .concat({ pizzaID: value, count: existingOrder.count + 1 });
+  
+      console.log(`Заказ: ${JSON.stringify(newOrder)}`);
+  
+      await AsyncStorage.setItem("@order", JSON.stringify(newOrder));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <View style={styles.menuContainer}>
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>

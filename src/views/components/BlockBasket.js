@@ -33,7 +33,7 @@ const BlockBasket = ({
           <Text>{description}</Text>
         </View>
         <View style={styles.buyButton}>
-          <Text style={{ fontSize: 18 }}>{count * cost} ₽</Text>
+          <Text style={{ fontSize: 18 }}>{count}шт. = {count * cost} ₽</Text>
         </View>
       </View>
     </View>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: COLORS.thirty,
     height: 60,
-    width: 80,
+    width: 160,
   },
 });
 

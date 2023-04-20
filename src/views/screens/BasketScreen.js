@@ -17,34 +17,34 @@ import GetPizzaFromOrder from "../components/GetPizzaFromOrder";
 // основня функция
 const BasketScreen = () => {
   // очистка корзины
-  const ClearAll = async () => {
-    try {
-      console.log("корзина очищена");
-      await AsyncStorage.removeItem("@order");
-    } catch (e) {}
-  };
+  
 
   // массив названий пицц
   let [orderList, setOrderList] = useState([{}]);
+
+  const ClearAll = async () => {
+    try {
+      console.log("корзина очищена");
+      setOrderList([]);
+      await AsyncStorage.removeItem("@order");
+    } catch (e) {}
+  };
 
   const getOrder = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("@order"); // получаем JSON-строку из AsyncStorage
       if (jsonValue !== null) {
         const orderArray = JSON.parse(jsonValue); // преобразуем строку в массив
-        console.log("Заказ дошел:");
-        console.log(orderArray);
         setOrderList(orderArray);
       }
     } catch (e) {
       console.log(`Error ${e}`);
     }
-    console.log("Пицца успешно дошла.");
   };
 
   useEffect(() => {
     getOrder();
-  }, []);
+  }, [orderList]);
 
   return (
     <SafeAreaView>
@@ -55,8 +55,6 @@ const BasketScreen = () => {
         <View style={styles.container}>
           <View style={styles.mainScreen}>
             {orderList.map((pizza) => {
-              console.log(`id ${pizza.pizzaID}`);
-              console.log(`count ${pizza.count}`);
               return (
                 <GetPizzaFromOrder
                   key={pizza.pizzaID}
@@ -66,7 +64,7 @@ const BasketScreen = () => {
               );
             })}
             <StatusBar style="auto" />
-            <Button title="Заполнить useState" onPress={getOrder} />
+            <Button title="Обновить корзину" onPress={getOrder} />
             <Button title="Очистить корзину" onPress={ClearAll} />
           </View>
         </View>
