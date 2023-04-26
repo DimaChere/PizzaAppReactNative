@@ -1,78 +1,32 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import COLORS from "../../conts/colors";
+import COLORS from "../../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// Функция добавления в асинк сторедж нового заказа
-// setToBusket = async (pizza) => {
-//   try {
-//     const order = await AsyncStorage.getItem("@order");
-//     const parsedOrder = order ? JSON.parse(order) : [];
-
-//     const existingOrder = parsedOrder.find(
-//       (item) => item.pizza.pizzaID === pizza.pizzaID
-//     ) || {
-//       count: 0,
-//     };
-
-//     const newOrder = parsedOrder
-//       .filter((item) => item.pizza.pizzaID !== pizza.pizzaID)
-//       .concat({ pizza, count: existingOrder.count + 1 });
-
-//     console.log(`Заказ: ${JSON.stringify(newOrder)}`);
-
-//     await AsyncStorage.setItem("@order", JSON.stringify(newOrder));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// setToBusket = async (value) => {
-//   try {
-//     const order = await AsyncStorage.getItem("@order");
-//     const parsedOrder = order ? JSON.parse(order) : [];
-
-//     const existingOrder = parsedOrder.find(
-//       (item) => item.pizzaID === value
-//     ) || {
-//       count: 0,
-//     };
-
-//     const newOrder = parsedOrder
-//       .filter((item) => item.pizzaID !== value)
-//       .concat({ pizzaID: value, count: existingOrder.count + 1 });
-
-//     console.log(`Заказ: ${JSON.stringify(newOrder)}`);
-
-//     await AsyncStorage.setItem("@order", JSON.stringify(newOrder));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const Block = ({ idPizza, imgSrc, pizzaName, description, cost }) => {
   const setToBusket = async (value) => {
     try {
       const order = await AsyncStorage.getItem("@order");
       const parsedOrder = order ? JSON.parse(order) : [];
-  
+
       const existingOrder = parsedOrder.find(
         (item) => item.pizzaID === value
       ) || {
         count: 0,
       };
-  
+
       const newOrder = parsedOrder
         .filter((item) => item.pizzaID !== value)
         .concat({ pizzaID: value, count: existingOrder.count + 1 });
-  
+
       console.log(`Заказ: ${JSON.stringify(newOrder)}`);
-  
+
       await AsyncStorage.setItem("@order", JSON.stringify(newOrder));
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   return (
     <View style={styles.menuContainer}>
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>
@@ -94,6 +48,7 @@ const Block = ({ idPizza, imgSrc, pizzaName, description, cost }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   menuContainer: {
     alignItems: "center",

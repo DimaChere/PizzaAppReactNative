@@ -10,8 +10,7 @@ import {
 import COLORS from "../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SQLite from "expo-sqlite";
-import GetUserNameFromId from "../components/GetUserNameFromId";
-import Button from "../components/Button";
+import GetUserNameFromId from "../components/Profile/GetUserNameFromId";
 
 function openDatabase() {
   if (Platform.OS === "web") {

@@ -10,8 +10,8 @@ import {
 import COLORS from "../../conts/colors";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as SQLite from "expo-sqlite";
-import TableFilling from "../components/pizzaList";
-import Block from "../components/Block";
+import TableFilling from "../components/Menu/pizzaList";
+import Block from "../components/Menu/Block";
 
 const db = SQLite.openDatabase("db.db");
 
@@ -50,7 +50,7 @@ const MenuScreen = ({ navigation }) => {
           }
         );
       });
-    }, []);
+    }, [pizzaList]);
 
     return (
       <View>
@@ -75,7 +75,7 @@ const MenuScreen = ({ navigation }) => {
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
-          <View style={styles.mainScreen}> 
+          <View style={styles.mainScreen}>
             <PizzaFilling />
             <StatusBar style="auto" />
           </View>

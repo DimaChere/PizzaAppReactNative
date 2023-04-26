@@ -15,7 +15,7 @@ import COLORS from "../../conts/colors";
 import Button from "../components/Button";
 //Screens
 import * as SQLite from "expo-sqlite";
-import Input from "../components/Input";
+import Input from "../components/RegLog/Input.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const db = SQLite.openDatabase("db.db");

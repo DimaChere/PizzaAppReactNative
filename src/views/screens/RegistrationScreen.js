@@ -15,7 +15,7 @@ import * as SQLite from "expo-sqlite";
 //Elements
 import Button from "../components/Button";
 //Screens
-import Input from "../components/Input";
+import Input from "../components/RegLog/Input.js";
 
 const db = SQLite.openDatabase("db.db");
 

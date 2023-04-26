@@ -7,7 +7,6 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-import COLORS from "../../conts/colors";
 import * as SQLite from "expo-sqlite";
 import BlockBasket from "./BlockBasket";
 const db = SQLite.openDatabase("db.db");

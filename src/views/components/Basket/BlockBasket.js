@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import React from "react";
-import COLORS from "../../conts/colors";
+import COLORS from "../../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 setToBusket = async (value) => {
   try {
@@ -14,14 +14,7 @@ setToBusket = async (value) => {
   }
 };
 
-const BlockBasket = ({
-  idPizza,
-  imgSrc,
-  pizzaName,
-  description,
-  cost,
-  count,
-}) => {
+const BlockBasket = ({ imgSrc, pizzaName, description, cost, count }) => {
   return (
     <View style={styles.menuContainer}>
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>
@@ -33,7 +26,9 @@ const BlockBasket = ({
           <Text>{description}</Text>
         </View>
         <View style={styles.buyButton}>
-          <Text style={{ fontSize: 18 }}>{count}шт. = {count * cost} ₽</Text>
+          <Text style={{ fontSize: 18 }}>
+            {count}шт. = {count * cost} ₽
+          </Text>
         </View>
       </View>
     </View>

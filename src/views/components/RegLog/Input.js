@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
-import COLORS from "../../conts/colors";
+import COLORS from "../../../conts/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Input = ({
@@ -50,6 +50,7 @@ const Input = ({
           style={{ color: COLORS.black, flex: 1 }}
           {...props}
         />
+
         {/* Иконка глаза */}
         {password && (
           <MaterialCommunityIcons
@@ -61,6 +62,7 @@ const Input = ({
           />
         )}
       </View>
+
       {/* Ошибка */}
       {error && (
         <Text style={{ color: COLORS.red, fontSize: 12, marginTop: 7 }}>
@@ -86,4 +88,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
 export default Input;

@@ -7,7 +7,7 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-import COLORS from "../../conts/colors";
+import COLORS from "../../../conts/colors";
 import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("db.db");

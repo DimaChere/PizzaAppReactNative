@@ -9,15 +9,13 @@ import {
   RefreshControl,
 } from "react-native";
 import COLORS from "../../conts/colors";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../components/Button";
-import GetPizzaFromOrder from "../components/GetPizzaFromOrder";
+import GetPizzaFromOrder from "../components/Basket/GetPizzaFromOrder";
 
 // основня функция
 const BasketScreen = () => {
   // очистка корзины
-  
 
   // массив названий пицц
   let [orderList, setOrderList] = useState([{}]);
@@ -65,7 +63,7 @@ const BasketScreen = () => {
             })}
             <StatusBar style="auto" />
             <Button title="Обновить корзину" onPress={getOrder} />
-            <Button title="Очистить корзину" onPress={ClearAll} />
+            <Button title="Заказать" onPress={ClearAll} />
           </View>
         </View>
       </ScrollView>
