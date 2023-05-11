@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,8 @@ import COLORS from "../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../components/Button";
 import GetPizzaFromOrder from "../components/Basket/GetPizzaFromOrder";
-
+import SumOrder from "../components/Basket/SumOrder";
+import { TouchableOpacity } from "react-native";
 // основня функция
 const BasketScreen = () => {
   // очистка корзины
@@ -22,7 +23,12 @@ const BasketScreen = () => {
 
   const ClearAll = async () => {
     try {
-      console.log("корзина очищена");
+      // console.log("корзина очищена");
+      setOrderList([]);
+      await AsyncStorage.removeItem("@order");
+    } catch (e) {}
+    try {
+      // console.log("корзина очищена");
       setOrderList([]);
       await AsyncStorage.removeItem("@order");
     } catch (e) {}
@@ -48,6 +54,11 @@ const BasketScreen = () => {
     <SafeAreaView>
       <View style={styles.upperContainer}>
         <Text style={styles.contents}>Корзина</Text>
+        <TouchableOpacity>
+          <Text style={styles.reload} onPress={getOrder}>
+            Обновить корзину
+          </Text>
+        </TouchableOpacity>
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
@@ -61,11 +72,11 @@ const BasketScreen = () => {
                 />
               );
             })}
+            <SumOrder pizza={orderList} />
             <StatusBar style="auto" />
-            <Button title="Обновить корзину" onPress={getOrder} />
-            <Button title="Заказать" onPress={ClearAll} />
           </View>
         </View>
+        <Button title="Заказать" onPress={ClearAll} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -76,6 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.sixty,
   },
   scroll: {
+    backgroundColor: COLORS.sixty,
     marginBottom: 80,
   },
   mainScreen: {
@@ -91,14 +103,24 @@ const styles = StyleSheet.create({
     zIndex: 2,
     backgroundColor: COLORS.thirty,
     height: 80,
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    paddingLeft: 30,
+    paddingHorizontal: 30,
   },
   contents: {
     fontSize: 40,
     color: COLORS.ten,
+  },
+  reload: {
+    fontSize: 17,
+    color: COLORS.white,
+    fontWeight: 700,
+    backgroundColor: COLORS.ten,
+    marginTop: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 4,
   },
 });
 

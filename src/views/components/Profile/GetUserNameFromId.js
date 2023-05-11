@@ -23,7 +23,7 @@ const GetUserNameFromId = ({ userID }) => {
         (_, { rows }) => {
           if (rows.length > 0) {
             setUserName(rows._array[0].name);
-            console.log(rows._array[0].name);
+            // console.log(rows._array[0].name);
           } else {
             console.log("-------------------------");
             console.log("Something went wrong:");

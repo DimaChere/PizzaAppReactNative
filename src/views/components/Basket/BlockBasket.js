@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import React from "react";
 import COLORS from "../../../conts/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 setToBusket = async (value) => {
   try {
     const order = await AsyncStorage.getItem("@order");
@@ -20,14 +21,11 @@ const BlockBasket = ({ imgSrc, pizzaName, description, cost, count }) => {
       <Image style={styles.pizza} source={{ uri: imgSrc }}></Image>
       <View style={styles.shortDescription}>
         <View style={styles.Name}>
-          <Text style={{ fontSize: 20 }}>{pizzaName}</Text>
-        </View>
-        <View style={styles.Description}>
-          <Text>{description}</Text>
+          <Text style={{ fontSize: 15 }}>{pizzaName}</Text>
         </View>
         <View style={styles.buyButton}>
-          <Text style={{ fontSize: 18 }}>
-            {count}шт. = {count * cost} ₽
+          <Text style={{ fontSize: 18, textAlign: "center" }}>
+            {count} шт.{"\n"} = {"\n"} {count * cost} ₽
           </Text>
         </View>
       </View>
@@ -40,36 +38,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingLeft: "3%",
-    paddingVertical: "3%",
-    paddingRight: "30%",
-    width: "90%",
-    height: 200,
+    paddingHorizontal: 6,
+    marginVertical: 6,
+    width: 400,
+    height: 100,
     borderRadius: 20,
   },
   shortDescription: {
-    height: "100%",
-    flexDirection: "column",
-    alignContent: "space-around",
+    flex: 1,
+    paddingLeft: 6,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
   },
   pizza: {
-    marginLeft: 100,
-    borderRadius: 150,
+    borderRadius: 50,
     borderWidth: 5,
-    height: 175,
-    width: 175,
+    height: 100,
+    width: 100,
     resizeMode: "contain",
   },
-  Name: { flex: 1 },
-  Description: { flex: 5 },
+  Name: { justifyContent: "center", alignItems: "center" },
   buyButton: {
-    flex: 2,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
     backgroundColor: COLORS.thirty,
-    height: 60,
-    width: 160,
+    height: 80,
+    width: 100,
   },
 });
 

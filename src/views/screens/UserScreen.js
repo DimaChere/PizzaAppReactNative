@@ -55,7 +55,6 @@ const UserScreen = () => {
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.mainScreen}>
-            <Text>Меню</Text>
             <StatusBar style="auto" />
           </View>
         </View>
